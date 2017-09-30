@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 // mongoose.connect('mongodb://localhost:27017/dataProviderDB',{useMongoClient:true})
 mongoose.Promise = global.Promise;
 
-mongoose.connection.openUri('mongodb://localhost:27017/dataProviderDB')
+mongoose.connection.openUri('mongodb://127.0.0.1:27017/dataProviderDB')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
