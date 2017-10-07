@@ -29,6 +29,13 @@ router.get('/getNews/:page', function (req, res, next) {
   })
 })
 
+router.get('/get/:cid', function (req, res, next) {
+  let cid = req.params.cid
+  News.findById(cid, function (err, news) {
+    res.json(news);
+  })
+})
+
 router.get('/made', function (req, res, next) {
   getSinaData();
   res.send('add ok')
