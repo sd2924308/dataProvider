@@ -44,7 +44,7 @@ NewsSchema.statics = {
             .skip(page * 10)
             .limit(10)
             .sort({
-                '_id': -1
+                'ctime': -1
             }).exec(cb);
     }
 }
