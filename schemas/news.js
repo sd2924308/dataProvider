@@ -27,7 +27,9 @@ NewsSchema.statics = {
     fetch: function (cb) { //查询所有数据
         return this
             .find()
-            .sort('ctime') //排序
+            .sort({
+                ctime: -1
+            }) //排序
             .exec(cb) //回调
     },
     findById: function (id, cb) { //根据id查询单条数据
