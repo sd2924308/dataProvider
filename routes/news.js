@@ -43,7 +43,7 @@ router.get('/initContent', function (req, res, next) {
 function getSinaData() {
   let dcount = 0;
   var newsurl = 'http://feed.mix.sina.com.cn/api/roll/get?lid=1761&pageid=192&num=10&page=[page]&fields=wapurl,title,media_name,images,img,comment_show&_=1506609226998&callback=feed_lotto_2551_1_3596649389618'
-  let pages = 55;
+  let pages = 1;
   for (var i = pages; i <= 100; i++) {
     let curUrl = newsurl.replace('[page]', i)
     let dcount = 0;
