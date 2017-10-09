@@ -40,9 +40,9 @@ NewsSchema.statics = {
             .exec(cb)
     },
     findPage: function (page, cb) {
-        page = page*1 + 2;
+        page = page*1+1;
         this.find({})
-            .skip(page * 10)
+            .skip(page * 10+5)
             .limit(10)
             .sort({
                 'ctime': -1
