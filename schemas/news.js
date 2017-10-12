@@ -40,7 +40,7 @@ NewsSchema.statics = {
             .exec(cb)
     },
     findPage: function (page, cb) {
-        page = page*1-1;
+        page = page*1+1;
         this.find({})
             .skip(page * 10)
             .limit(10)
