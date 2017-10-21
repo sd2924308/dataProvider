@@ -72,7 +72,7 @@ router.get('/getSina/:u', function (req, res, next) {
       };
       var $ = cheerio.load(val.toString());
       data.title = $('.article h1').text() || '';
-      data.content = $('.article .content').html() || '';
+      data.content = '<p class="art_p">' + $('.article .content').html() || '' + '</p>';
       res.json(data);
     })
   else
