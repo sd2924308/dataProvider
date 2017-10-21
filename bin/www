@@ -3,16 +3,19 @@
 /**
  * Module dependencies.
  */
+const express = require('express')
+const path = require('path')
 
 var app = require('../app');
 var debug = require('debug')('dataprovider:server');
 var http = require('http');
 
+app.use(express.static(path.join(__dirname, 'public')))
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8080');
+var port = normalizePort(process.env.PORT || '8088');
 app.set('port', port);
 
 /**
