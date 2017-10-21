@@ -51,9 +51,12 @@ router.get('/getSina/:u', function (req, res, next) {
   let u = req.params.u
   if (u && u.indexOf('http') != -1)
     comm.geturlbyhttps(u, 'utf-8', function (val) {
-      var data = {};
+      var data = {
+        title: '',
+        content: ''
+      };
       var $ = cheerio.load(val.toString());
-      data.title = $('.art_tit_h1').html();
+      data.title = $('.art_tit_h1').html() || '';
       $('.art_p').each(function (i, t) {
         data.content += '<p class="art_p">' + $(t).html() || '' + '</p>';
       })
