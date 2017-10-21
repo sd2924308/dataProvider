@@ -49,23 +49,71 @@ router.get('/initContent', function (req, res, next) {
 
 router.get('/getSina/:u', function (req, res, next) {
   let u = req.params.u
+
   if (u && u.indexOf('http') != -1)
-    comm.geturlbyhttps(u, 'utf-8', function (val) {
+    if (u.indexOf('https://') != -1)
+      comm.geturlbyhttps(u, 'utf-8', function (val) {
+        var data = {
+          title: '',
+          content: ''
+        };
+        var $ = cheerio.load(val.toString());
+        data.title = $('.art_tit_h1').html() || '';
+        $('.art_p').each(function (i, t) {
+          data.content += '<p class="art_p">' + $(t).html() || '' + '</p>';
+        })
+        res.json(data);
+      })
+  else
+    comm.geturl(u, 'utf-8', function (val) {
       var data = {
         title: '',
         content: ''
       };
       var $ = cheerio.load(val.toString());
-      data.title = $('.art_tit_h1').html() || '';
-      $('.art_p').each(function (i, t) {
-        data.content += '<p class="art_p">' + $(t).html() || '' + '</p>';
-      })
+      data.title = $('.article h1').text() || '';
+      data.content = $('.article .content').html() || '';
       res.json(data);
     })
   else
     res.json({});
 });
 
+router.get('/getSinaBlog', function (req, res, next) {
+  let u = 'http://finance.sina.cn/blog?vt=4&pos=102&cid=76524'
+  if (u && u.indexOf('http') != -1)
+    comm.geturl(u, 'utf-8', function (val) {
+      var data = {
+        result: {
+          data: {
+            list: []
+          }
+        }
+      };
+      var $ = cheerio.load(val.toString());
+      $('.carditems a').each(function (i, t) {
+        console.log()
+        var img = $(t).children('dl').children('dt').children('img').attr('src');
+        var title = $(t).children('dl').children('dd').children('h3').html();
+        var URL = $(t).attr('href');
+        URL = URL.replace('http://blog.sina.com.cn/s/', 'http://blog.sina.cn/dpool/blog/s/');
+        var tmp = {
+          title: title,
+          URL: URL,
+          allPics: {
+            pics: [{
+              imgurl: img
+            }]
+          }
+        }
+        data.result.data.list.push(tmp);
+      })
+      res.json(data);
+    })
+  else
+    res.json({});
+});
+// 
 
 function getSinaData() {
   let dcount = 0;
