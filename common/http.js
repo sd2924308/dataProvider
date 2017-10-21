@@ -25,6 +25,25 @@ exports.geturl = function(url, encoder, callback) {
 }
 
 
+//获取网页内容
+exports.geturlbyhttps = function(url, encoder, callback) {
+    var _encoder = "utf-8";
+    encoder && (_encoder = encoder);
+    https.get(url, function(res) {
+        var bufferHelper = new BufferHelper(); //解决中文编码问题
+        res.on('data', function(chunk) {
+            bufferHelper.concat(chunk);
+        });
+        res.on('end', function() {
+            var val = iconv.decode(bufferHelper.toBuffer(), _encoder);
+            callback(val);
+        }).on('error', function() {
+            console.log('页面加载错误');
+        });
+    });
+}
+
+
 
 
 //通过代理获取页面内容

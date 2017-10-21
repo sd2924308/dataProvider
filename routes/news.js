@@ -47,6 +47,23 @@ router.get('/initContent', function (req, res, next) {
   res.send('add ok')
 });
 
+router.get('/getSina/:u', function (req, res, next) {
+  let u = req.params.u
+  if (u && u.indexOf('http') != -1)
+    comm.geturlbyhttps(u, 'utf-8', function (val) {
+      var data = {};
+      var $ = cheerio.load(val.toString());
+      data.title = $('.art_tit_h1').html();
+      $('.art_p').each(function (i, t) {
+        data.content += '<p class="art_p">' + $(t).html() + '</p>';
+      })
+      res.json(data);
+    })
+  else
+    res.json({});
+});
+
+
 function getSinaData() {
   let dcount = 0;
   var newsurl = 'http://feed.mix.sina.com.cn/api/roll/get?lid=1761&pageid=192&num=10&page=[page]&fields=wapurl,title,media_name,images,img,comment_show&_=1506609226998&callback=feed_lotto_2551_1_3596649389618'
