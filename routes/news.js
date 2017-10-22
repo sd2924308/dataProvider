@@ -60,7 +60,8 @@ router.get('/getSina/:u', function (req, res, next) {
         var $ = cheerio.load(val.toString());
         data.title = $('.art_tit_h1').html() || '';
         $('.art_p').each(function (i, t) {
-          data.content += '<p class="art_p">' + $(t).html() || '' + '</p>';
+          if (i != $('.art_p').length - 1)
+            data.content += '<p class="art_p">' + $(t).html() || '' + '</p>';
         })
         res.json(data);
       })
