@@ -61,8 +61,8 @@ function refreshSHCount() {
 
 function getSHData() {
   let dcount = 0;
-  var newsurl = 'http://m.changshifang.com/cs/liyi/list_9_[page].html'
-  // var newsurl = 'http://m.changshifang.com/shxcs/list_75_[page].html';
+  // var newsurl = 'http://m.changshifang.com/cs/liyi/list_9_[page].html'
+  var newsurl = 'http://m.changshifang.com/shxcs/list_75_[page].html';
   let pages = 1;
   for (var i = pages; i <= 30; i++) {
     let curUrl = newsurl.replace('[page]', i)
@@ -81,7 +81,7 @@ function getSHData() {
           if (s) {
             // if (!s.content)
               getSHContent(cid, s.curl)
-            // else
+            // elseu
               console.log('已存在');
           } else {
             new SH({
