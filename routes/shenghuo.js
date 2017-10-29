@@ -47,7 +47,7 @@ function getSHData() {
   let dcount = 0;
   var newsurl = 'http://m.360changshi.com/sh/miaozhao/list_[page].html'
   let pages = 1;
-  for (var i = pages; i <= 1; i++) {
+  for (var i = pages; i <= 30; i++) {
     let curUrl = newsurl.replace('[page]', i)
     comm.geturl(curUrl, 'utf-8', function (val) {
       var $ = cheerio.load(val.toString());
