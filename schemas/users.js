@@ -2,8 +2,12 @@ var mongoose = require('mongoose');
 
 //申明一个mongoons对象
 var UsersSchema = new mongoose.Schema({
-    name: String,
-    paw: String,
+    loginname: String,
+    pwd: String,
+    phone: String,
+    email: String,
+    nickName: String,
+    appid: String,
     meta: {
         createAt: {
             type: Date,
@@ -17,23 +21,35 @@ var UsersSchema = new mongoose.Schema({
 })
 
 //每次执行都会调用,时间更新操作
-UsersSchema.pre('save', function (next) {
-    if (this.isNew) {
-        this.meta.createAt = this.meta.updateAt = Date.now();
-    } else {
-        this.meta.updateAt = Date.now();
-    }
-
-    next();
-})
+// UsersSchema.pre('save', function (next) {
+//     if (this.isNew) {
+//         this.meta.createAt = this.meta.updateAt = Date.now();
+//     } else {
+//         this.meta.updateAt = Date.now();
+//     }
+//     next();
+// })
 
 //查询的静态方法
 UsersSchema.statics = {
+    login: function (loginname, pwd, appid, cb) {
+        return this.findOne({
+            loginname: loginname,
+            pwd: pwd,
+            appid: appid
+        }).exec(cb)
+    },
     fetch: function (cb) { //查询所有数据
         return this
             .find()
             .sort('meta.updateAt') //排序
             .exec(cb) //回调
+    },
+    findByName: function (name, appid, cb) { //根据id查询单条数据
+        return this.findOne({
+            loginname: name,
+            appid: appid
+        }).exec(cb)
     },
     findById: function (id, cb) { //根据id查询单条数据
         return this

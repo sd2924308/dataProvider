@@ -15,6 +15,8 @@ mongoose.connection.openUri('mongodb://127.0.0.1:27017/dataProviderDB')
 var index = require('./routes/index');
 var users = require('./routes/users');
 var news = require('./routes/news');
+var sc = require('./routes/shoucang');
+var sh = require('./routes/shenghuo');
 
 var app = express();
 
@@ -33,6 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/news', news);
+app.use('/shoucang', sc);
+app.use('/sh', sh);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
