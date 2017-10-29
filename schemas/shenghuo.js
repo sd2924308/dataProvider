@@ -47,7 +47,7 @@ SHSchema.statics = {
             .skip(page * 10 + rand)
             .limit(10)
             .sort({
-                'ctime': 1
+                '_id': -1
             }).exec(cb);
     }
 }
