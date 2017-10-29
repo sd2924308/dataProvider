@@ -62,11 +62,11 @@ function refreshSHCount() {
 function getSHData() {
   let dcount = 0;
   // var newsurl = 'http://m.changshifang.com/cs/liyi/list_9_[page].html'
-  var newsurl='http://m.changshifang.com/shxcs/list_75_[page].html';
+  var newsurl = 'http://m.changshifang.com/shxcs/list_75_[page].html';
   let pages = 1;
   for (var i = pages; i <= 3; i++) {
     let curUrl = newsurl.replace('[page]', i)
-    comm.geturl(curUrl, 'gbk', function (val) { 
+    comm.geturl(curUrl, 'gbk', function (val) {
       var $ = cheerio.load(val.toString())
       $('.card_module .f_card').each(function (i, t) {
         let curl = $(t).find('a').attr('href');
@@ -124,10 +124,10 @@ function getSHData1() {
 
         SH.findById(cid, function (err, s) {
           if (s) {
-            if (!s.content)
+            // if (!s.content)
               getSHContent(cid, s.curl)
-            else
-              console.log('已存在');
+            // else
+            //   console.log('已存在');
           } else {
             new SH({
               cid: cid,
@@ -152,14 +152,19 @@ function getSHData1() {
 
 function getSHContent(id, url) {
   console.log('加载内容..');
-  url='http://m.changshifang.com'+url;
+  url = 'http://m.changshifang.com' + url;
   comm.geturl(url, 'gbk', function (val) {
     var $ = cheerio.load(val.toString());
 
     $('.article a').each(function (i, t) {
       $(t).attr('href', 'javascript:;')
     })
-
+    $('.article img').each(function (i, t) {
+      var url = $(t).attr('src')
+      if (url.indexOf('http') == -1)
+        url = 'http://m.changshifang.com' + url;
+      $(t).attr('src', url)
+    })
     c = $('.article').html();
 
     // var chapters = $('body')
