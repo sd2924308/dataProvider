@@ -61,9 +61,10 @@ function refreshSHCount() {
 
 function getSHData() {
   let dcount = 0;
-  var newsurl = 'http://m.changshifang.com/cs/liyi/list_9_[page].html'
+  // var newsurl = 'http://m.changshifang.com/cs/liyi/list_9_[page].html'
+  var newsurl='http://m.changshifang.com/shxcs/list_75_[page].html';
   let pages = 1;
-  for (var i = pages; i <= 14; i++) {
+  for (var i = pages; i <= 3; i++) {
     let curUrl = newsurl.replace('[page]', i)
     comm.geturl(curUrl, 'gbk', function (val) { 
       var $ = cheerio.load(val.toString())
