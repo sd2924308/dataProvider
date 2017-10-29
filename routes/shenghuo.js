@@ -79,9 +79,9 @@ function getSHData() {
 
         SH.findById(cid, function (err, s) {
           if (s) {
-            if (!s.content)
+            // if (!s.content)
               getSHContent(cid, s.curl)
-            else
+            // else
               console.log('已存在');
           } else {
             new SH({
@@ -124,10 +124,10 @@ function getSHData1() {
 
         SH.findById(cid, function (err, s) {
           if (s) {
-            // if (!s.content)
+            if (!s.content)
               getSHContent(cid, s.curl)
-            // else
-            //   console.log('已存在');
+            else
+              console.log('已存在');
           } else {
             new SH({
               cid: cid,
