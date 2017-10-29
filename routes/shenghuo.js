@@ -42,6 +42,21 @@ router.get('/made', function (req, res, next) {
 });
 
 
+router.get('/initContent', function (req, res, next) {
+  refreshSHCount();
+  res.send('add ok')
+});
+
+
+function refreshSHCount() {
+  SH.fetch(function (err, shs) {
+    shs.forEach(function (element) {
+      if (!element.content) {
+        getSHContent1(element.cid, element.curl)
+      }
+    }, this);
+  })
+}
 
 function getSHData() {
   let dcount = 0;
@@ -82,9 +97,6 @@ function getSHData() {
             })
           }
         })
-
-
-
       }, this);
 
       // val = val.replace('try{feed_lotto_2551_1_3596649389618(', '').replace(');}catch(e){};', '')
@@ -138,6 +150,39 @@ function getSHContent(id, url) {
     })
 
     c = $('article').html();
+
+    // var chapters = $('body')
+    // var c = chapters.find('.c_mainTxtContainer').html();
+
+    SH.update({
+      cid: id
+    }, {
+      content: c
+    }, {
+      safe: true,
+      multi: true
+    }, function (err, docs) {
+      if (err) console.log(err);
+    })
+  })
+}
+
+
+
+function getSHContent1(id, url) {
+  url = url.replace('m.', 'www.');
+  console.log(url);
+  console.log('加载内容..');
+  comm.geturl(url, 'utf-8', function (val) {
+    var $ = cheerio.load(val.toString());
+
+    var c = '';
+    $('.desc a').each(function (i, t) {
+      $(t).attr('href', 'javascript:;')
+    })
+    $('.desc p').each(function (i, t) {
+      c += '<p>' + $(t).html() + '</p>'
+    })
 
     // var chapters = $('body')
     // var c = chapters.find('.c_mainTxtContainer').html();
