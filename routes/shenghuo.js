@@ -79,9 +79,9 @@ function getSHData() {
 
         SH.findById(cid, function (err, s) {
           if (s) {
-            // if (!s.content)
+            if (!s.content)
               getSHContent(cid, s.curl)
-            // elseu
+            elseu
               console.log('已存在');
           } else {
             new SH({
