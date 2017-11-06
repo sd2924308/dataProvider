@@ -60,6 +60,11 @@ router.get('/initContent', function (req, res, next) {
   res.send('add ok')
 });
 
+router.get('/initContentTY', function (req, res, next) {
+  refreshNesCountTY();
+  res.send('add ok')
+});
+
 router.get('/getSina/:u', function (req, res, next) {
   let u = req.params.u
 
@@ -181,7 +186,7 @@ function getSinaDataTY() {
   var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=72264&col=72264&level=1,2,3&show_num=30&page=[page]&act=more'
   let pages = 1;
   for (var i = pages; i <= 33; i++) {
-  // for (var i = pages; i <= 1; i++) {
+    // for (var i = pages; i <= 1; i++) {
     let curUrl = newsurl.replace('[page]', i)
     let dcount = 0;
     comm.geturl(curUrl, 'utf-8', function (val) {
@@ -194,7 +199,7 @@ function getSinaDataTY() {
           var cid = 'i' + el._id;
           var imgs = el.allPics.pics[0].imgurl;
           var intro = el.summary;
-          var ctime = el;
+          var ctime = el.cdateTime;
           var curl = el.URL;
           News.findById(cid, function (err, news) {
             if (news) {
@@ -223,6 +228,8 @@ function getSinaDataTY() {
     })
   }
 }
+
+
 
 
 
@@ -259,6 +266,16 @@ function getNewsContentTY(id, url) {
   }
 }
 
+
+function refreshNesCountTY() {
+  News.fetch(function (err, news) {
+    news.forEach(function (element) {
+      if (!element.content) {
+        getNewsContentTY(element.cid, element.curl)
+      }
+    }, this);
+  })
+}
 
 
 function refreshNesCount() {
