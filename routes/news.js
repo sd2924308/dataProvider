@@ -278,7 +278,7 @@ function getNewsContentTY(id, url) {
 function refreshNesCountTY() {
   News.fetch(function (err, news) {
     news.forEach(function (element) {
-      if (!element.content) {
+      if (!element.content || element.content == "") {
         if (element.tp == '1')
           getNewsContentTY(element.cid, element.curl)
       }
