@@ -248,7 +248,9 @@ function getNewsContentTY(id, url) {
     var c = '';
     var imgs = ''
     if ($('.sharePic') != null) {
-      imgs = $('.sharePic').attr('src')
+      imgs = $('.sharePic').attr('src');
+      if (imgs.indexOf('http:') == -1)
+        imgs = 'http:' + imgs;
       c += '<p class="art_p"><img src="' + imgs + '" /></p>';
     }
 
@@ -276,10 +278,10 @@ function getNewsContentTY(id, url) {
 function refreshNesCountTY() {
   News.fetch(function (err, news) {
     news.forEach(function (element) {
-      // if (!element.content) {
-      if (element.tp == '1')
-        getNewsContentTY(element.cid, element.curl)
-      // }
+      if (!element.content) {
+        if (element.tp == '1')
+          getNewsContentTY(element.cid, element.curl)
+      }
     }, this);
   })
 }
