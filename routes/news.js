@@ -180,8 +180,8 @@ function getSinaDataTY() {
   let dcount = 0;
   var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=72264&col=72264&level=1,2,3&show_num=30&page=[page]&act=more'
   let pages = 1;
-  // for (var i = pages; i <= 33; i++) {
-  for (var i = pages; i <= 1; i++) {
+  for (var i = pages; i <= 33; i++) {
+  // for (var i = pages; i <= 1; i++) {
     let curUrl = newsurl.replace('[page]', i)
     let dcount = 0;
     comm.geturl(curUrl, 'utf-8', function (val) {
