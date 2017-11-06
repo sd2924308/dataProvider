@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 //申明一个mongoons对象
 var NewsSchema = new mongoose.Schema({
     cid: String,
+    tp: String, //默认0或空 彩票，1体育，2电子 3.金融
     ctitle: String,
     curl: String,
     ctime: String,
@@ -44,10 +45,23 @@ NewsSchema.statics = {
         var c = 150 - 0 + 1;
         var rand = Math.floor(Math.random() * c + 0);
         this.find({})
-            .skip(page * 10 + rand+100)
+            .skip(page * 10 + rand + 100)
             .limit(10)
             .sort({
                 'ctime': 1
+            }).exec(cb);
+    },
+    findPageAndTp: function (page, tp, cb) {
+        page = page * 1;
+        var c = 150 - 0 + 1;
+        var rand = Math.floor(Math.random() * c + 0);
+        this.find({
+                tp: tp
+            })
+            .skip(page * 10 + rand)
+            .limit(10)
+            .sort({
+                'ctime': -1
             }).exec(cb);
     }
 }

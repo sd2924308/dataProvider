@@ -29,6 +29,15 @@ router.get('/getNews/:page', function (req, res, next) {
   })
 })
 
+
+router.get('/getNews/:page/:tp', function (req, res, next) {
+  let page = req.params.page
+  let tp = req.params.tp
+  News.findPageAndTp(page, tp, function (err, news) {
+    res.json(news);
+  })
+})
+
 router.get('/get/:cid', function (req, res, next) {
   let cid = req.params.cid
   News.findById(cid, function (err, news) {
@@ -36,8 +45,12 @@ router.get('/get/:cid', function (req, res, next) {
   })
 })
 
-router.get('/made', function (req, res, next) {
-  getSinaData();
+router.get('/made/:tp', function (req, res, next) {
+  let tp = req.params.tp
+  if (tp == 0) //彩票数据
+    getSinaData();
+  if (tp == 1)
+    getSinaDataTY(); //体育数据
   res.send('add ok')
 });
 
@@ -159,6 +172,94 @@ function getSinaData() {
     })
   }
 }
+
+
+
+
+function getSinaDataTY() {
+  let dcount = 0;
+  var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=72264&col=72264&level=1,2,3&show_num=30&page=[page]&act=more'
+  let pages = 1;
+  // for (var i = pages; i <= 33; i++) {
+  for (var i = pages; i <= 1; i++) {
+    let curUrl = newsurl.replace('[page]', i)
+    let dcount = 0;
+    comm.geturl(curUrl, 'utf-8', function (val) {
+
+      val = JSON.parse(val)
+      val.result.data.list.forEach(function (el) {
+
+        if (el.allPics.total > 0 && el.mediaTypes == 'normal') {
+          var title = el.stitle;
+          var cid = 'i' + el._id;
+          var imgs = el.allPics.pics[0].imgurl;
+          var intro = el.summary;
+          var ctime = el;
+          var curl = el.URL;
+          News.findById(cid, function (err, news) {
+            if (news) {
+              if (!news.content)
+                getNewsContentTY(cid, news.curl)
+              else
+                console.log('已存在');
+            } else {
+              new News({
+                cid: cid,
+                ctitle: title,
+                ctime: ctime,
+                cimg: imgs,
+                intro: intro,
+                curl: curl,
+                tp: '1'
+              }).save(function () {
+                //写入成功后，加载内容
+                getNewsContentTY(cid, curl)
+                console.log('新增' + (++dcount) + '条数据')
+              })
+            }
+          })
+        }
+      }, this);
+    })
+  }
+}
+
+
+
+function getNewsContentTY(id, url) {
+  if (url.indexOf('https://') != -1) {
+    comm.geturlbyhttps(url, 'utf-8', function (val) {
+      go(val)
+    })
+  } else {
+    comm.geturl(url, 'utf-8', function (val) {
+      go(val)
+    })
+  }
+
+  function go(val) {
+    var $ = cheerio.load(val.toString());
+    var c = '';
+    $('.art_p').each(function (i, t) {
+      if (i != $('.art_p').length - 1)
+        c += '<p class="art_p">' + $(t).html() || '' + '</p>';
+    })
+
+    News.update({
+      cid: id
+    }, {
+      content: c
+    }, {
+      safe: true,
+      multi: true
+    }, function (err, docs) {
+      if (err) console.log(err);
+      console.log('内容填充');
+    })
+  }
+}
+
+
 
 function refreshNesCount() {
   News.fetch(function (err, news) {
