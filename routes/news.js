@@ -232,7 +232,6 @@ function getSinaDataTY() {
 
 
 
-
 function getNewsContentTY(id, url) {
   if (url.indexOf('https://') != -1) {
     comm.geturlbyhttps(url, 'utf-8', function (val) {
@@ -247,6 +246,12 @@ function getNewsContentTY(id, url) {
   function go(val) {
     var $ = cheerio.load(val.toString());
     var c = '';
+    var imgs = ''
+    if ($('.sharePic') != null) {
+      imgs = $('.sharePic').attr('src')
+      c += '<p class="art_p"><img src="' + imgs + '" /></p>';
+    }
+
     $('.art_p').each(function (i, t) {
       if (i != $('.art_p').length - 1)
         c += '<p class="art_p">' + $(t).html() || '' + '</p>';
@@ -255,6 +260,7 @@ function getNewsContentTY(id, url) {
     News.update({
       cid: id
     }, {
+      cimg: imgs,
       content: c
     }, {
       safe: true,
@@ -270,9 +276,10 @@ function getNewsContentTY(id, url) {
 function refreshNesCountTY() {
   News.fetch(function (err, news) {
     news.forEach(function (element) {
-      if (!element.content) {
+      // if (!element.content) {
+      if (element.tp == '1')
         getNewsContentTY(element.cid, element.curl)
-      }
+      // }
     }, this);
   })
 }
