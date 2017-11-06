@@ -249,7 +249,7 @@ function getNewsContentTY(id, url) {
     var imgs = ''
     if ($('.sharePic') != null) {
       imgs = $('.sharePic').attr('src');
-      if (imgs.indexOf('http:') == -1)
+      if (imgs && imgs.indexOf('http:') == -1)
         imgs = 'http:' + imgs;
       c += '<p class="art_p"><img src="' + imgs + '" /></p>';
     }
