@@ -44,7 +44,9 @@ NewsSchema.statics = {
         page = page * 1;
         var c = 150 - 0 + 1;
         var rand = Math.floor(Math.random() * c + 0);
-        this.find({})
+        this.find({
+                tp:null
+            })
             .skip(page * 10 + rand + 100)
             .limit(10)
             .sort({
