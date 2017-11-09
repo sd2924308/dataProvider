@@ -47,7 +47,7 @@ NewsSchema.statics = {
         this.find({
                 tp:null
             })
-            .skip(page * 10 + rand + 100)
+            .skip(page * 10 + rand)
             .limit(10)
             .sort({
                 'ctime': -1
