@@ -48,7 +48,7 @@ NewsSchema.statics = {
             .skip(page * 10 + rand + 100)
             .limit(10)
             .sort({
-                'ctime': 1
+                'ctime': -1
             }).exec(cb);
     },
     findPageAndTp: function (page, tp, cb) {
