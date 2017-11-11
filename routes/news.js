@@ -242,7 +242,7 @@ function getSinaDataTY() {
 //获取财经数据
 function getSinaDataCJ(cid) {
   let dcount = 0;
-  var newsurl = 'https://app5.fx168api.com/news/getNewsByChannel.json?channelId=' + cid + '&appVersion=3.2.3&t=&maxId=&direct=first&pageSize=10&minId=&appCategory=android'
+  var newsurl = 'https://app5.fx168api.com/news/getNewsByChannel.json?channelId=' + cid + '&appVersion=3.2.3&t=&maxId=&direct=first&pageSize=300&minId=&appCategory=android'
   let pages = 1;
   for (var i = pages; i <= 1; i++) {
     let dcount = 0;
