@@ -267,7 +267,7 @@ function getSinaDataCJ(cid) {
               ctime: ctime,
               cimg: imgs,
               curl: curl,
-              tp: 'cj'
+              tp: 'cj' + cid
             }).save(function () {
               //写入成功后，加载内容
               // getNewsContentTY(cid, curl)
