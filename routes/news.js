@@ -54,6 +54,13 @@ router.get('/made/:tp', function (req, res, next) {
   res.send('add ok')
 });
 
+//抓取财经数据
+router.get('/madecj/:cj', function (req, res, next) {
+  let cj = req.params.cj
+  getSinaDataCJ(cj); //财经数据
+  res.send('add ok')
+});
+
 
 router.get('/initContent', function (req, res, next) {
   refreshNesCount();
@@ -231,6 +238,65 @@ function getSinaDataTY() {
 
 
 
+
+//获取财经数据
+function getSinaDataCJ(cid) {
+  let dcount = 0;
+  var newsurl = 'https://app5.fx168api.com/news/getNewsByChannel.json?channelId=' + cid + '&appVersion=3.2.3&t=&maxId=&direct=first&pageSize=300&minId=&appCategory=android'
+  let pages = 1;
+  for (var i = pages; i <= 1; i++) {
+    let dcount = 0;
+    comm.geturlbyhttps(newsurl, 'utf-8', function (val) {
+      val = JSON.parse(val)
+      val.data.pager.result.forEach(function (el) {
+        var title = el.newsTitle;
+        var cid = el.id;
+        var imgs = el.image;
+        var ctime = el.publishTime;
+        var curl = el.appNewsUrl;
+        News.findById(cid, function (err, news) {
+          if (news) {
+            if (!news.content)
+              getNewsContentCJ(cid, news.curl)
+            else
+              console.log('已存在');
+          } else {
+            new News({
+              cid: cid,
+              ctitle: title,
+              ctime: ctime,
+              cimg: imgs,
+              curl: curl,
+              tp: 'cj'
+            }).save(function () {
+              //写入成功后，加载内容
+              // getNewsContentTY(cid, curl)
+              console.log('新增' + (++dcount) + '条数据')
+            })
+          }
+        })
+
+      }, this);
+    })
+  }
+}
+
+function getNewsContentCJ(id, url) {
+  comm.geturlbyhttps('https://app5.fx168api.com/news/getNews.json?appCategory=android&appVersion=3.2.3&t=&newsId=' + id, 'utf-8', function (val) {
+    var data = JSON.parse(val);
+    News.update({
+      cid: id
+    }, {
+      content: data.data.result.newsContent
+    }, {
+      safe: true,
+      multi: true
+    }, function (err, docs) {
+      if (err) console.log(err);
+      console.log('内容填充');
+    })
+  })
+}
 
 function getNewsContentTY(id, url) {
   if (url.indexOf('https://') != -1) {
