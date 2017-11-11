@@ -242,7 +242,7 @@ function getSinaDataTY() {
 //获取财经数据
 function getSinaDataCJ(cid) {
   let dcount = 0;
-  var newsurl = 'https://app5.fx168api.com/news/getNewsByChannel.json?channelId=' + cid + '&appVersion=3.2.3&t=&maxId=&direct=first&pageSize=300&minId=&appCategory=android'
+  var newsurl = 'https://app5.fx168api.com/news/getNewsByChannel.json?channelId=' + cid + '&appVersion=3.2.3&t=&maxId=&direct=first&pageSize=10&minId=&appCategory=android'
   let pages = 1;
   for (var i = pages; i <= 1; i++) {
     let dcount = 0;
@@ -258,7 +258,7 @@ function getSinaDataCJ(cid) {
         News.findById(nid, function (err, news) {
           if (news) {
             if (!news.content)
-              getNewsContentCJ(cid, nid, news.curl)
+              getNewsContentCJ(cid, nid)
             else
               console.log('已存在');
           } else {
@@ -271,7 +271,7 @@ function getSinaDataCJ(cid) {
               tp: 'cj' + cid
             }).save(function () {
               //写入成功后，加载内容
-              getNewsContentCJ(cid, nid, news.curl)
+              getNewsContentCJ(cid, nid)
               console.log('新增' + (++dcount) + '条数据')
             })
           }
@@ -282,7 +282,7 @@ function getSinaDataCJ(cid) {
   }
 }
 
-function getNewsContentCJ(cid, nid, url) {
+function getNewsContentCJ(cid, nid) {
 
   var did = nid.replace('cj' + cid + '_', '');
   comm.geturlbyhttps('https://app5.fx168api.com/news/getNews.json?appCategory=android&appVersion=3.2.3&t=&newsId=' + did, 'utf-8', function (val) {
