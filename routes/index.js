@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var comm = require('../common/http');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -9,7 +10,15 @@ router.get('/', function (req, res, next) {
 });
 
 
-
+router.get('/shui/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://5597755.com/Lottery_server/get_init_data.php?type=android&appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var b = new Buffer(val.data, 'base64')
+    val.data = b.toString('utf8')
+    res.json(val);
+  })
+})
 
 var request = require('request'),
   cheerio = require('cheerio'),
