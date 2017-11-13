@@ -16,6 +16,7 @@ router.get('/shui/:sid', function (req, res, next) {
     var val = JSON.parse(val);
     var b = new Buffer(val.data, 'base64')
     val.data = b.toString('utf8')
+    val.showurl=val.show_url;
     res.json(val);
   })
 })
