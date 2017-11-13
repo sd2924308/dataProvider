@@ -15,8 +15,8 @@ router.get('/shui/:sid', function (req, res, next) {
   comm.geturl('http://5597755.com/Lottery_server/get_init_data.php?type=android&appid=' + sid, 'utf-8', function (val) {
     var val = JSON.parse(val);
     var b = new Buffer(val.data, 'base64')
-    val.data = b.toString('utf8')
-    val.showurl=val.show_url;
+    val.data = JSON.parse(b.toString('utf8'))
+    val.data.showurl=val.data.show_url;
     res.json(val);
   })
 })
