@@ -62,6 +62,15 @@ router.get('/madecj/:cj', function (req, res, next) {
 });
 
 
+//转发168行情数据
+router.get('/hq/:hq', function (req, res, next) {
+  let hq = req.params.hq;
+  var u = 'https://app5.fx168api.com/quotation/getQuotationNavConfig.json?appCategory=android&appVersion=3.2.3&t=&key=' + hq;
+  comm.geturlbyhttps(u, 'utf-8', function (val) {
+    res.json(val);
+  })
+})
+
 router.get('/initContent', function (req, res, next) {
   refreshNesCount();
   res.send('add ok')
