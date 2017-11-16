@@ -305,8 +305,8 @@ function getSCData(res) {
 
   let dcount = 0;
   var newsurl = 'https://cn.motorsport.com/all/news/?s=1&p=[page]'
-  let pages = 1;
-  for (var i = pages; i <= 20; i++) {
+  let pages = 2;
+  for (var i = pages; i <= 2; i++) {
     let dcount = 0;
     newsurl = newsurl.replace('[page]', i);
     comm.geturlbyhttps(newsurl, 'utf-8', function (val) {
