@@ -43,7 +43,7 @@ NewsSchema.statics = {
     findPage: function (page, cb) {
         page = page * 1-1;
         
-        var rand =Math.floor(Math.random()*50)+0
+        var rand =Math.floor(Math.random()*150)+0
         this.find({
                 tp: null
             })
