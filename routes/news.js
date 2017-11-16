@@ -354,7 +354,7 @@ function getNewsContentSC(curl, cid) {
     $('.articleTextBox .content p').each(function (ii, t) {
       content += '<p>' + $(t).html() + '</p>';
     })
-    if (content)
+    if (content) {
       News.update({
         cid: cid
       }, {
@@ -366,8 +366,10 @@ function getNewsContentSC(curl, cid) {
         if (err) console.log(err);
         console.log('内容填充');
       })
-    else
-      console.log('内容填充失败'+val);
+    } else {
+      console.log(val.indexOf('<div class="articleContent">'))
+    }
+
   })
 }
 
