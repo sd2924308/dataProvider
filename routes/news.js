@@ -367,7 +367,7 @@ function getNewsContentSC(curl, cid) {
         console.log('内容填充');
       })
     else
-      console.log('内容填充失败');
+      console.log('内容填充失败'+val);
   })
 }
 
