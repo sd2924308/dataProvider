@@ -348,6 +348,7 @@ function getSCData(res) {
 
 
 function getNewsContentSC(curl, cid) {
+  curl=encodeURI(curl);
   comm.geturlbyhttps(curl, 'utf-8', function (val) {
     var $ = cheerio.load(val.toString());
     var content = '';
@@ -367,7 +368,7 @@ function getNewsContentSC(curl, cid) {
         console.log('内容填充');
       })
     } else {
-        console.log(val.indexOf('articleContent'))
+        console.log(curl)
     }
   })
 }
