@@ -367,9 +367,8 @@ function getNewsContentSC(curl, cid) {
         console.log('内容填充');
       })
     } else {
-      console.log(val.indexOf('<div class="articleContent">'))
+        console.log(val.indexOf('articleContent'))
     }
-
   })
 }
 
