@@ -15,6 +15,7 @@ var cheerio = require("cheerio");
 
 
 
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {
@@ -59,6 +60,11 @@ router.get('/madecj/:cj', function (req, res, next) {
   let cj = req.params.cj
   getSinaDataCJ(cj); //财经数据
   res.send('add ok')
+});
+
+//抓取财经数据
+router.get('/madesc', function (req, res, next) {
+  getSCData(res); //财经数据
 });
 
 
@@ -289,6 +295,80 @@ function getSinaDataCJ(cid) {
       }, this);
     })
   }
+}
+
+
+
+
+//获取赛车数据(F1:f1/news 方程式:formula-e/news/ ctcc:ctcc crc:crc  耐力赛:wec 拉力赛：wrc 摩托车：motogp 卡丁车：kart)
+function getSCData(res) {
+
+  let dcount = 0;
+  var newsurl = 'https://cn.motorsport.com/all/news/?s=1&p=[page]'
+  let pages = 1;
+  for (var i = pages; i <= 1; i++) {
+    let dcount = 0;
+    newsurl = newsurl.replace('[page]', i);
+    comm.geturlbyhttps(newsurl, 'utf-8', function (val) {
+      var $ = cheerio.load(val.toString());
+      $('.item').each(function (ii, t) {
+        var ctitle = $(t).find('h3').text();
+        var cimg = $(t).find('.thumb img').attr('src')
+        var ctime = $(t).find('.date').attr('data-date')
+        var curl = 'https://cn.motorsport.com' + $(t).find('.thumb').attr('href');
+        var cid = curl.substr(curl.lastIndexOf('-') + 1, 6);
+        if (curl.indexOf('/news/') != -1) {
+          News.findById(cid, function (err, news) {
+            if (news) {
+              if (!news.content)
+                getNewsContentSC(curl, cid)
+              else
+                console.log('已存在');
+            } else {
+              new News({
+                cid: cid,
+                ctitle: ctitle,
+                ctime: ctime,
+                cimg: cimg,
+                curl: curl,
+                tp: 'sc'
+              }).save(function () {
+                //写入成功后，加载内容
+                getNewsContentSC(curl, cid)
+                console.log('新增' + (++dcount) + '条数据')
+              })
+            }
+          })
+        }
+      })
+      res.send('add ok')
+    })
+  }
+}
+
+
+function getNewsContentSC(curl, cid) {
+  comm.geturlbyhttps(curl, 'utf-8', function (val) {
+    var $ = cheerio.load(val.toString());
+    var content = '';
+    $('.articleTextBox .content p').each(function (ii, t) {
+      content += '<p>' + $(t).html() + '</p>';
+    })
+    if (content)
+      News.update({
+        cid: cid
+      }, {
+        content: content
+      }, {
+        safe: true,
+        multi: true
+      }, function (err, docs) {
+        if (err) console.log(err);
+        console.log('内容填充');
+      })
+    else
+      console.log('内容填充失败');
+  })
 }
 
 function getNewsContentCJ(cid, nid) {
