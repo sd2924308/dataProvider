@@ -63,8 +63,9 @@ router.get('/madecj/:cj', function (req, res, next) {
 });
 
 //抓取财经数据
-router.get('/madesc', function (req, res, next) {
-  getSCData(res); //财经数据
+router.get('/madesc/:page', function (req, res, next) {
+  let page = req.params.page
+  getSCData(res,page); //财经数据
 });
 
 
@@ -301,12 +302,12 @@ function getSinaDataCJ(cid) {
 
 
 //获取赛车数据(F1:f1/news 方程式:formula-e/news/ ctcc:ctcc crc:crc  耐力赛:wec 拉力赛：wrc 摩托车：motogp 卡丁车：kart)
-function getSCData(res) {
+function getSCData(res,p) {
 
   let dcount = 0;
   var newsurl = 'https://cn.motorsport.com/all/news/?s=1&p=[page]'
-  let pages = 2;
-  for (var i = pages; i <= 2; i++) {
+  let pages = p;
+  for (var i = pages; i <= p; i++) {
     let dcount = 0;
     newsurl = newsurl.replace('[page]', i);
     comm.geturlbyhttps(newsurl, 'utf-8', function (val) {
