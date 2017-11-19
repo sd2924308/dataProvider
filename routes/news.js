@@ -218,7 +218,7 @@ function get163Data(tp) {
 
 
   for (var i = pages; i <= 10; i++) {
-    let curUrl = newsurl.replace('[page]', pages).replace('[type]', tp);
+    let curUrl = newsurl.replace('[page]', i).replace('[type]', tp);
     let dcount = 0;
     comm.geturl(curUrl, 'utf-8', function (val) {
       var $ = cheerio.load(val.toString());
