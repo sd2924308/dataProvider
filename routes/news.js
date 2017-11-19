@@ -217,7 +217,7 @@ function get163Data(tp) {
   let pages = 1;
 
 
-  for (var i = pages; i <= 1; i++) {
+  for (var i = pages; i <= 10; i++) {
     let curUrl = newsurl.replace('[page]', pages).replace('[type]', tp);
     let dcount = 0;
     comm.geturl(curUrl, 'utf-8', function (val) {
