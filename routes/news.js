@@ -55,6 +55,14 @@ router.get('/made/:tp', function (req, res, next) {
   res.send('add ok')
 });
 
+
+router.get('/madecp/:tp', function (req, res, next) {
+  let tp = req.params.tp
+  get163Data(tp); //彩票数据
+  res.send('add ok')
+});
+
+
 //抓取财经数据
 router.get('/madecj/:cj', function (req, res, next) {
   let cj = req.params.cj
@@ -65,7 +73,7 @@ router.get('/madecj/:cj', function (req, res, next) {
 //抓取财经数据
 router.get('/madesc/:page', function (req, res, next) {
   let page = req.params.page
-  getSCData(res,page); //财经数据
+  getSCData(res, page); //财经数据
 });
 
 
@@ -201,7 +209,56 @@ function getSinaData() {
   }
 }
 
+// http://zx.caipiao.163.com/zx/wap_list.html?pageNo=1&tp=toutiao&ajax=1
+//头条 行业 动态 双色球ssq 大乐透dlt 竞技彩jingcai 篮彩lancai 彩市新闻news 胜负彩sfc
+function get163Data(tp) {
+  let dcount = 0;
+  var newsurl = 'http://zx.caipiao.163.com/zx/wap_list.html?pageNo=[page]&tp=[type]&ajax=1'
+  let pages = 1;
 
+
+  for (var i = pages; i <= 1; i++) {
+    let curUrl = newsurl.replace('[page]', pages).replace('[type]', tp);
+    let dcount = 0;
+    comm.geturl(curUrl, 'utf-8', function (val) {
+      var $ = cheerio.load(val.toString());
+      $('li').each(function (i, el) {
+        let ctitle = $(el).find('h2').text();
+        let intro = $(el).find('p').text();
+        let ctime = $(el).find('.mark2').text();
+        let imgs = $(el).find('img').attr('src');
+        let curl = $(el).find('.newsLink').attr('href');
+        let cid = curl.substr(curl.lastIndexOf('/') + 1)
+        cid = cid.substr(0, cid.lastIndexOf('.'));
+
+        if (imgs) {
+          News.findById(cid, function (err, news) {
+            if (news) {
+              if (!news.content)
+                get163NewsContent(cid, news.curl)
+              else
+                console.log('已存在');
+            } else {
+              new News({
+                cid: cid,
+                ctitle: ctitle,
+                ctime: ctime,
+                cimg: imgs,
+                intro: intro,
+                curl: curl,
+                tp: 'cp' + tp
+              }).save(function () {
+                //写入成功后，加载内容
+                get163NewsContent(cid, curl)
+                console.log('新增' + (++dcount) + '条数据')
+              })
+            }
+          })
+        }
+      })
+    })
+  }
+}
 
 
 function getSinaDataTY() {
@@ -302,7 +359,7 @@ function getSinaDataCJ(cid) {
 
 
 //获取赛车数据(F1:f1/news 方程式:formula-e/news/ ctcc:ctcc crc:crc  耐力赛:wec 拉力赛：wrc 摩托车：motogp 卡丁车：kart)
-function getSCData(res,p) {
+function getSCData(res, p) {
 
   let dcount = 0;
   var newsurl = 'https://cn.motorsport.com/all/news/?s=1&p=[page]'
@@ -347,9 +404,35 @@ function getSCData(res,p) {
   }
 }
 
+function get163NewsContent(cid, curl) {
+  curl = encodeURI(curl);
+  comm.geturl(curl, 'utf-8', function (val) {
+    var $ = cheerio.load(val.toString());
+    var content = '';
+    $('.articleCon p').each(function (ii, t) {
+      content += '<p>' + $(t).html().replace('网易彩票', '') + '</p>';
+    })
+
+    if (content) {
+      News.update({
+        cid: cid
+      }, {
+        content: content
+      }, {
+        safe: true,
+        multi: true
+      }, function (err, docs) {
+        if (err) console.log(err);
+        console.log('内容填充');
+      })
+    } else {
+      console.log(curl)
+    }
+  })
+}
 
 function getNewsContentSC(curl, cid) {
-  curl=encodeURI(curl);
+  curl = encodeURI(curl);
   comm.geturlbyhttps(curl, 'utf-8', function (val) {
     var $ = cheerio.load(val.toString());
     var content = '';
@@ -369,7 +452,7 @@ function getNewsContentSC(curl, cid) {
         console.log('内容填充');
       })
     } else {
-        console.log(curl)
+      console.log(curl)
     }
   })
 }
