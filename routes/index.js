@@ -16,7 +16,7 @@ router.get('/shui/:sid', function (req, res, next) {
     var val = JSON.parse(val);
     var b = new Buffer(val.data, 'base64')
     val.data = JSON.parse(b.toString('utf8'))
-    val.data.showurl=val.data.show_url;
+    val.data.showurl = val.data.show_url;
     res.json(val);
   })
 })
@@ -30,7 +30,18 @@ var arryData = [],
   pageNum = 1,
   maxPageNum = 6;
 
-
+router.get('/zst/:url', function (req, res, next) {
+  let url = req.params.url
+  url = decodeURIComponent(url);
+  console.log(url);
+  comm.geturl(url, 'gb2312', function (val) {
+    var $ = cheerio.load(val);
+    $('.top').remove();
+    $('.wrapper').attr('style', 'top:0')
+    res.send($.html());
+  })
+  // res.send('<h1>test</h1>')
+})
 
 router.get('/getWaiHui', function (req, res, next) {
   fetchInfo();
