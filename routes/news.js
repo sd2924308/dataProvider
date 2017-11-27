@@ -49,10 +49,19 @@ router.get('/get/:cid', function (req, res, next) {
 router.get('/made/:tp', function (req, res, next) {
   let tp = req.params.tp
   if (tp == 0) //彩票数据
+  {
     getSinaData();
-  if (tp == 1)
+  }
+  if (tp == 1) {
     getSinaDataTY(); //体育数据
-  res.send('add ok')
+    res.send('add ok')
+  }
+  if (tp == 2) {
+    getDZData();
+    res.send('add ok')
+  }
+
+
 });
 
 
@@ -260,6 +269,81 @@ function get163Data(tp) {
   }
 }
 
+function getDZData() {
+  let dcount = 0;
+  var newsurl = 'http://m.eccn.com/Consultation/Common/ajaxmore'
+  let pages = 1;
+
+  for (var i = pages; i <= 100; i++) {
+    comm.post('m.eccn.com', '/Consultation/Common/ajaxmore', {
+      infostring: i + '-5_6_10_1_111110'
+    }, function (res) {
+      res = res.substr(res.indexOf('<dl'));
+      res = res.substr(0, res.lastIndexOf('dl>') + 3);
+
+      var htmls = res.split('","');
+      htmls.forEach(function (t, i) {
+        t = t.replace(/\\"/g, '"');
+        t = t.replace(/\\\//g, '/');
+        var $ = cheerio.load(t.toString());
+        var url = 'http://m.eccn.com' + $('a').attr('href');
+        var img = $('img').attr('src');
+        var title = $('h4').text();
+        var id = url.substr(url.lastIndexOf('/') + 1)
+        id = id.substr(0, id.lastIndexOf('.') - 1);
+        var cid = 'dz' + id;
+        if (img) {
+          News.findById(cid, function (err, news) {
+            if (news) {
+              if (!news.content)
+                getDZContent(cid, news.curl)
+              else
+                console.log('已存在');
+            } else {
+              new News({
+                cid: cid,
+                ctitle: title,
+                ctime: id,
+                cimg: img,
+                curl: url,
+                tp: 'dz'
+              }).save(function () {
+                //写入成功后，加载内容
+                getDZContent(cid, url)
+                console.log('新增' + (++dcount) + '条数据')
+              })
+            }
+          })
+        }
+
+      }, this)
+
+    })
+  }
+}
+
+
+function getDZContent(cid, url) {
+  comm.geturl(url, 'utf-8', function (val) {
+    var $ = cheerio.load(val.toString());
+    var c = $('.j_article_main').find('p').html()
+    if (c) {
+      News.update({
+        cid: cid
+      }, {
+        content: c
+      }, {
+        safe: true,
+        multi: true
+      }, function (err, docs) {
+        if (err) console.log(err);
+        console.log('内容填充');
+      })
+    } else {
+      console.log(url)
+    }
+  })
+}
 
 function getSinaDataTY() {
   let dcount = 0;
