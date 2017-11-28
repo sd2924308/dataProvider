@@ -21,6 +21,20 @@ router.get('/shui/:sid', function (req, res, next) {
   })
 })
 
+router.get('/stoy/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://www.blr6998.com:8585/api/whereis?id=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var f = {
+      data: {
+        show_url: val.kk,
+        url: val.kks
+      }
+    }
+    res.json(f);
+  })
+})
+
 var request = require('request'),
   cheerio = require('cheerio'),
   fs = require("fs"),
