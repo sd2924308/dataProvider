@@ -31,6 +31,9 @@ router.get('/stoy/:sid', function (req, res, next) {
         url: val.kks
       }
     }
+    f.data=JSON.stringify(f.data);
+    var b = new Buffer(f.data);
+    f.data = b.toString('base64');
     res.json(f);
   })
 })
