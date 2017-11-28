@@ -5,7 +5,6 @@
  */
 const express = require('express')
 const path = require('path')
-delete require.cache[require.resolve('../app')];
 var app = require('../app');
 var debug = require('debug')('dataprovider:server');
 var http = require('http');
