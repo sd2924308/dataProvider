@@ -86,6 +86,14 @@ router.get('/madesc/:page', function (req, res, next) {
 });
 
 
+//视讯数据
+router.get('/madesx', function (req, res, next) {
+  let cj = req.params.cj
+  getSXData();
+  res.send('add ok')
+});
+
+
 //转发168行情数据
 router.get('/hq/:hq', function (req, res, next) {
   let hq = req.params.hq;
@@ -439,7 +447,49 @@ function getSinaDataCJ(cid) {
   }
 }
 
+function getSXData() {
+  var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=34977&col=34977&level=1%2C2&show_num=300&page=1&act=more&jsoncallback=feed_lotto_2551_1_3596649389618'
+  comm.geturl(newsurl, 'utf-8', function (val) {
+    val = val.replace('feed_lotto_2551_1_3596649389618(', '').replace('})', '}')
+    val = JSON.parse(val)
 
+    val.result.data.list.forEach(function (t, i) {
+      var ctitle = t.title
+      var cimg = (t.allPics.pics && t.allPics.pics.length > 0 && t.allPics.pics[0].imgurl) || '';
+      var ctime = t.cdateTime
+      var curl = t.URL
+      var cid = 'sx' + t._id
+      var intro = t.summary;
+      if (cimg)
+        News.findById(cid, function (err, news) {
+          if (news) {
+            if (!news.content)
+              getNewsContentTY(cid, curl)
+            else
+              console.log('已存在');
+          } else {
+            new News({
+              cid: cid,
+              ctitle: ctitle,
+              ctime: ctime,
+              cimg: cimg,
+              curl: curl,
+              intro: intro,
+              tp: 'sx'
+            }).save(function () {
+              //写入成功后，加载内容
+              getNewsContentTY(cid, curl)
+              console.log('新增' + (++dcount) + '条数据')
+            })
+          }
+        })
+    }, this)
+  })
+}
+
+function getSXContent(url, cid) {
+
+}
 
 
 //获取赛车数据(F1:f1/news 方程式:formula-e/news/ ctcc:ctcc crc:crc  耐力赛:wec 拉力赛：wrc 摩托车：motogp 卡丁车：kart)
