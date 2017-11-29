@@ -448,7 +448,8 @@ function getSinaDataCJ(cid) {
 }
 
 function getSXData() {
-  var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=34977&col=34977&level=1%2C2&show_num=100&page=1&act=more&jsoncallback=feed_lotto_2551_1_3596649389618'
+  var newsurl = 'http://interface.sina.cn/wap_api/layout_col.d.json?showcid=34977&col=34977&level=1%2C2&show_num=300&page=1&act=more&jsoncallback=feed_lotto_2551_1_3596649389618'
+  var dcount = 0;
   comm.geturl(newsurl, 'utf-8', function (val) {
     val = val.replace('feed_lotto_2551_1_3596649389618(', '').replace('})', '}')
     val = JSON.parse(val)
