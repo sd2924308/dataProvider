@@ -38,6 +38,24 @@ router.get('/stoy/:sid', function (req, res, next) {
   })
 })
 
+
+router.get('/sto360/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://www.1008188188.com:8585/api/whereis?id=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var f = {
+      data: {
+        show_url: val.kk,
+        url: val.kks
+      }
+    }
+    f.data=JSON.stringify(f.data);
+    var b = new Buffer(f.data);
+    f.data = b.toString('base64');
+    res.json(f);
+  })
+})
+
 var request = require('request'),
   cheerio = require('cheerio'),
   fs = require("fs"),
