@@ -29,6 +29,8 @@ router.get('/360tox/:sid', function (req, res, next) {
     if (val.success && val.AppConfig) {
       if (val.AppConfig.ShowWeb) {
         data = '{"kk":1,"kks":"'+val.AppConfig.Url+'","menu":0}'
+      }else{
+        data = '{"kk":0,"kks":"","menu":0}'
       }
     } else {
       data = '{"kk":0,"kks":"","menu":0}'
