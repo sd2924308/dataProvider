@@ -21,6 +21,27 @@ router.get('/shui/:sid', function (req, res, next) {
   })
 })
 
+router.get('/360tox/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://185.216.248.94:8080/biz/getAppConfig?appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var data = {
+      kk: 0,
+      kks: ''
+    }
+
+    if (val.success && val.AppConfig) {
+      if (val.AppConfig.ShowWeb) {
+        data.kk = 1;
+      }
+      if (val.AppConfig.Url) {
+        data.kks = val.AppConfig.Url;
+      }
+    }
+    res.json(data);
+  })
+})
+
 router.get('/stoy/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://www.blr6998.com:8585/api/whereis?id=' + sid, 'utf-8', function (val) {
@@ -31,7 +52,7 @@ router.get('/stoy/:sid', function (req, res, next) {
         url: val.kks
       }
     }
-    f.data=JSON.stringify(f.data);
+    f.data = JSON.stringify(f.data);
     var b = new Buffer(f.data);
     f.data = b.toString('base64');
     res.json(f);
@@ -49,7 +70,7 @@ router.get('/sto360/:sid', function (req, res, next) {
         url: val.kks
       }
     }
-    f.data=JSON.stringify(f.data);
+    f.data = JSON.stringify(f.data);
     var b = new Buffer(f.data);
     f.data = b.toString('base64');
     res.json(f);
