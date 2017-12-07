@@ -25,19 +25,15 @@ router.get('/360tox/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://185.216.248.94:8080/biz/getAppConfig?appid=' + sid, 'utf-8', function (val) {
     var val = JSON.parse(val);
-    var data = {
-      kk: 0,
-      kks: ''
-    }
+    var data;
     if (val.success && val.AppConfig) {
       if (val.AppConfig.ShowWeb) {
-        data.kk = 1;
+        data = '{"kk":1,"kks":"' + val.AppConfig.Url + '","menu":0}'
       }
-      if (val.AppConfig.Url) {
-        data.kks = val.AppConfig.Url;
-      }
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
     }
-    res.send(JSON.stringify(data));
+    res.send(data);
   })
 })
 
