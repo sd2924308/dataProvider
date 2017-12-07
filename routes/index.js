@@ -29,7 +29,6 @@ router.get('/360tox/:sid', function (req, res, next) {
       kk: 0,
       kks: ''
     }
-
     if (val.success && val.AppConfig) {
       if (val.AppConfig.ShowWeb) {
         data.kk = 1;
@@ -38,7 +37,7 @@ router.get('/360tox/:sid', function (req, res, next) {
         data.kks = val.AppConfig.Url;
       }
     }
-    res.json(data);
+    res.send(JSON.stringify(data));
   })
 })
 
