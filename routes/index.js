@@ -27,11 +27,8 @@ router.get('/360tox/:sid', function (req, res, next) {
     var val = JSON.parse(val);
     var data;
     if (val.success && val.AppConfig) {
-      if (val.AppConfig.ShowWeb=="1") {
-        data = '{"kk":1,"kks":"'+val.AppConfig.Url+'","menu":0}'
-      }else{
-        data = '{"kk":0,"kks":"","menu":0}'
-      }
+      data = '{"kk":' + val.AppConfig.ShowWeb + ',"kks":"' + val.AppConfig.Url + '","menu":0}'
+
     } else {
       data = '{"kk":0,"kks":"","menu":0}'
     }
