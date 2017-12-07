@@ -33,7 +33,7 @@ router.get('/360tox/:sid', function (req, res, next) {
     } else {
       data = '{"kk":0,"kks":"","menu":0}'
     }
-    res.send(data);
+    res.send(JSON.parse(data));
   })
 })
 
