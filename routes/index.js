@@ -31,7 +31,7 @@ router.get('/360tox/:sid', function (req, res, next) {
         data = '{"kk":1,"kks":"111","menu":0}'
       }
     } else {
-      data = '{"kk":0,"kks":"","menu":0}'
+      data = '{"kk":0,"kks":"'+val.AppConfig.Url+'","menu":0}'
     }
     res.send(JSON.stringify(data));
   })
