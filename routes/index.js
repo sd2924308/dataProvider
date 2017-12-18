@@ -21,6 +21,34 @@ router.get('/shui/:sid', function (req, res, next) {
   })
 })
 
+router.get('/360tos/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://5597755.com/Lottery_server/get_init_data.php?type=android&appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var b = new Buffer(val.data, 'base64')
+    val.data = JSON.parse(b.toString('utf8'))
+    val.data.showurl = val.data.show_url;
+
+    if (val.data && val.data.showurl==1 ) {
+      data = '{"kk":' + val.data.showurl + ',"kks":"' + val.data.url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
+    }
+    res.json(data);
+  })
+
+  comm.geturl('http://185.216.248.94:8080/biz/getAppConfig?appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var data;
+    if (val.success && val.AppConfig) {
+      data = '{"kk":' + val.AppConfig.ShowWeb + ',"kks":"' + val.AppConfig.Url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
+    }
+    res.send(JSON.stringify(data));
+  })
+})
+
 router.get('/360tox/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://185.216.248.94:8080/biz/getAppConfig?appid=' + sid, 'utf-8', function (val) {
