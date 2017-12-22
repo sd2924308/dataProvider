@@ -43,7 +43,19 @@ router.get('/360tos/:sid', function (req, res, next) {
   })
 })
 
-
+router.get('/360toq/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://app.you228.com/Lottery_server/check_and_get_url.php?type=android&appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    var data = '{"kk":0,"kks":"","menu":0}';
+    if (val.data && val.data.show_url == 1) {
+      data = '{"kk":' + val.data.show_url + ',"kks":"' + val.data.url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
+    }
+    res.json(data);
+  })
+})
 
 router.get('/360tox/:sid', function (req, res, next) {
   let sid = req.params.sid;
