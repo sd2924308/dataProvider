@@ -43,6 +43,25 @@ router.get('/360tos/:sid', function (req, res, next) {
   })
 })
 
+router.get('/360tos1/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://vipapp.01appddd.com/Lottery_server/get_init_data.php?type=android&appid=' + sid, 'utf-8', function (val) {
+    var val = JSON.parse(val);
+    if (val.data) {
+      var b = new Buffer(val.data, 'base64')
+      val.data = JSON.parse(b.toString('utf8'))
+      val.data.showurl = val.data.show_url;
+    }
+    var data = '{"kk":0,"kks":"","menu":0}';
+    if (val.data && val.data.showurl == 1) {
+      data = '{"kk":' + val.data.showurl + ',"kks":"' + val.data.url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
+    }
+    res.json(data);
+  })
+})
+
 router.get('/360toq/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://app.you228.com/Lottery_server/check_and_get_url.php?type=android&appid=' + sid, 'utf-8', function (val) {
