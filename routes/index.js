@@ -99,7 +99,7 @@ router.get('/360todw/:sid', function (req, res, next) {
     if (val.status == 1 || val.status == '1') {
       data = '{"kk":' + val.status + ',"kks":"' + val.url + '","menu":0}'
     } else {
-      data = '{"kk":0,"kks":"","menu":0}'
+      data = '{"kk":0,"kks":"'+val.url+'","menu":0}'
     }
     res.send(JSON.stringify(data));
   })
