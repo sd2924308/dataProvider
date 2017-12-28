@@ -90,6 +90,21 @@ router.get('/360tox/:sid', function (req, res, next) {
   })
 })
 
+
+router.get('/360todw/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://1114600.com:8080/appgl/appShow/getByAppId?appId=' + sid, 'utf-8', function (val) {
+
+    val = JSON.parse(val);
+    if (val.status == 1 || val.status == '1') {
+      data = '{"kk":' + val.status + ',"kks":"' + val.url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"","menu":0}'
+    }
+    res.send(JSON.stringify(data));
+  })
+})
+
 router.get('/stoy/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://www.blr6998.com:8585/api/whereis?id=' + sid, 'utf-8', function (val) {
