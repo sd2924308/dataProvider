@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+
+<body>
+  <%= title %>
+
+    <script>
+      var url = '<%= url %>'
+
+      var _quitFirst = null
+      document.addEventListener('plusready', function () {
+        var e = plus.webview.create(url, "myweb222");
+        plus.webview.currentWebview().append(e);
+        e.show();
+        e.addEventListener('loaded',function(){
+           //xy.html
+        })
+        mui.back = function () {
+          e.canBack(function (data) {
+            if (data.canBack) {
+              e.back();
+            } else {
+              var self = this;
+              //首次按键，提示‘再按一次退出应用’
+              if (!_quitFirst) {
+                _quitFirst = new Date()
+                  .getTime();
+                mui.toast('再按一次退出应用');
+                setTimeout(function () {
+                  _quitFirst = null;
+                }, 1000);
+              } else {
+                if (new Date()
+                  .getTime() - _quitFirst < 1000) {
+                  plus.runtime.quit();
+                }
+              }
+
+            }
+          })
+
+        }
+
+        // plus.key.addEventListener('backbutton', function () {
+        //   e.canBack(function (data) {
+        //     if (data.canBack) {
+        //       e.back();
+        //       return;
+        //     } else {
+        //       var self = this;
+        //       //首次按键，提示‘再按一次退出应用’
+        //       if (!_quitFirst) {
+        //         _quitFirst = new Date()
+        //           .getTime();
+        //         plus.nativeUI.toast('再按一次退出应用1');
+        //         setTimeout(function () {
+        //           _quitFirst = null;
+        //         }, 1000);
+        //       } else {
+        //         if (new Date()
+        //           .getTime() - _quitFirst < 1000) {
+        //           plus.runtime.quit();
+        //         }
+        //       }
+        //     }
+        //   })
+        // }, false);
+      }, false);
+    </script>
+</body>
+
+</html>

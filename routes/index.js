@@ -99,7 +99,23 @@ router.get('/360todw/:sid', function (req, res, next) {
     if (val.status == 1 || val.status == '1') {
       data = '{"kk":' + val.status + ',"kks":"' + val.url + '","menu":0}'
     } else {
-      data = '{"kk":0,"kks":"'+val.url+'","menu":0}'
+      data = '{"kk":0,"kks":"' + val.url + '","menu":0}'
+    }
+    res.send(JSON.stringify(data));
+  })
+})
+
+router.get('/360towd/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://103.85.23.139:5858/api/whereis?id=' + sid, 'utf-8', function (val) {
+
+    val = JSON.parse(val);
+    if (val.kk == 1 || val.kk == '1') {
+
+      var url = 'http://data.imtpp.com/fix/' + encodeURIComponent(val.kks)
+      data = '{"kk":' + val.kk + ',"kks":"' + url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"' + val.kks + '","menu":0}'
     }
     res.send(JSON.stringify(data));
   })
