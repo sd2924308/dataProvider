@@ -97,7 +97,8 @@ router.get('/360todw/:sid', function (req, res, next) {
 
     val = JSON.parse(val);
     if (val.status == 1 || val.status == '1') {
-      data = '{"kk":' + val.status + ',"kks":"' + val.url + '","menu":0}'
+      var url = 'http://data.imtpp.com/fix/' + encodeURIComponent(val.url)
+      data = '{"kk":' + val.status + ',"kks":"' + url + '","menu":0}'
     } else {
       data = '{"kk":0,"kks":"' + val.url + '","menu":0}'
     }
