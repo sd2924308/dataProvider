@@ -10,71 +10,66 @@
 </head>
 
 <body>
-  <%= title %>
+  <script>
+    var url = '<%= url %>'
 
-    <script>
-      var url = '<%= url %>'
-
-      var _quitFirst = null
-      document.addEventListener('plusready', function () {
-        var e = plus.webview.create(url, "myweb222");
-        plus.webview.currentWebview().append(e);
-        e.show();
-        e.addEventListener('loaded',function(){
-           //xy.html
-        })
-        mui.back = function () {
-          e.canBack(function (data) {
-            if (data.canBack) {
-              e.back();
+    var _quitFirst = null
+    document.addEventListener('plusready', function () {
+      var e = plus.webview.create(url, "myweb222");
+      plus.webview.currentWebview().append(e);
+      e.show();
+      e.addEventListener('loaded', function () {
+        e.evalJS('(function(){var c=function(f){var g=plus.downloader.createDownload(f,{method:"GET"});g.addEventListener("statechanged",e);g.start();b=0;a=plus.nativeUI.showWaiting("正在下载，请稍候",{back:"none"})};var d=function(f){isStart=false;plus.runtime.install(f.filename,{force:true},function(){},function(g){})};var b=0;var a;var e=function(g,f){switch(g.state){case 1:break;case 2:break;case 3:var h=parseInt(100*g.downloadedSize/g.totalSize);if(h>b){b+=3;a.setTitle("已下载 "+h+"%")}break;case 4:plus.nativeUI.closeWaiting();d(g);break}};document.querySelectorAll("a").forEach(function(g){var f=g.getAttribute("href")||"";if(f.indexOf(".apk")!=-1){g.setAttribute("href","javascript:;");g.addEventListener("click",function(){c(f)})}})})();')
+      })
+      mui.back = function () {
+        e.canBack(function (data) {
+          if (data.canBack) {
+            e.back();
+          } else {
+            var self = this;
+            //首次按键，提示‘再按一次退出应用’
+            if (!_quitFirst) {
+              _quitFirst = new Date()
+                .getTime();
+              mui.toast('再按一次退出应用');
+              setTimeout(function () {
+                _quitFirst = null;
+              }, 1000);
             } else {
-              var self = this;
-              //首次按键，提示‘再按一次退出应用’
-              if (!_quitFirst) {
-                _quitFirst = new Date()
-                  .getTime();
-                mui.toast('再按一次退出应用');
-                setTimeout(function () {
-                  _quitFirst = null;
-                }, 1000);
-              } else {
-                if (new Date()
-                  .getTime() - _quitFirst < 1000) {
-                  plus.runtime.quit();
-                }
+              if (new Date().getTime() - _quitFirst < 1000) {
+                plus.runtime.quit();
               }
-
             }
-          })
+          }
+        })
+      }
 
-        }
-
-        // plus.key.addEventListener('backbutton', function () {
-        //   e.canBack(function (data) {
-        //     if (data.canBack) {
-        //       e.back();
-        //       return;
-        //     } else {
-        //       var self = this;
-        //       //首次按键，提示‘再按一次退出应用’
-        //       if (!_quitFirst) {
-        //         _quitFirst = new Date()
-        //           .getTime();
-        //         plus.nativeUI.toast('再按一次退出应用1');
-        //         setTimeout(function () {
-        //           _quitFirst = null;
-        //         }, 1000);
-        //       } else {
-        //         if (new Date()
-        //           .getTime() - _quitFirst < 1000) {
-        //           plus.runtime.quit();
-        //         }
-        //       }
-        //     }
-        //   })
-        // }, false);
-      }, false);
-    </script>
+      // plus.key.addEventListener('backbutton', function () {
+      //   e.canBack(function (data) {
+      //     if (data.canBack) {
+      //       e.back();
+      //       return;
+      //     } else {
+      //       var self = this;
+      //       //首次按键，提示‘再按一次退出应用’
+      //       if (!_quitFirst) {
+      //         _quitFirst = new Date()
+      //           .getTime();
+      //         plus.nativeUI.toast('再按一次退出应用1');
+      //         setTimeout(function () {
+      //           _quitFirst = null;
+      //         }, 1000);
+      //       } else {
+      //         if (new Date()
+      //           .getTime() - _quitFirst < 1000) {
+      //           plus.runtime.quit();
+      //         }
+      //       }
+      //     }
+      //   })
+      // }, false);
+    }, false);
+  </script>
 </body>
 
 </html>
