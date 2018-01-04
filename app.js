@@ -18,7 +18,7 @@ var news = require('./routes/news');
 var sc = require('./routes/shoucang');
 var sh = require('./routes/shenghuo');
 var fix = require('./routes/fix');
-
+var down = require('./routes/down');
 var app = express();
 
 // view engine setup
@@ -39,6 +39,8 @@ app.use('/news', news);
 app.use('/shoucang', sc);
 app.use('/sh', sh);
 app.use('/fix', fix);
+
+app.use('/down', down);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

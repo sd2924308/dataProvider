@@ -3,11 +3,11 @@ var router = express.Router();
 var comm = require('../common/http');
 
 /* GET home page. */
-router.get('/:url', function (req, res, next) {
-  let url = req.params.url
-  res.render('fix', {
-    title: '修复助手',
-    url: url
+
+router.get('/app', function (req, res, next) {
+  res.render('downapp', {
+    title: '正在更新请稍候'
   });
 });
+
 module.exports = router;
