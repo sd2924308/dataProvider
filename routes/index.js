@@ -54,8 +54,8 @@ router.get('/360tosdown/:sid', function (req, res, next) {
     }
     var data = '{"kk":0,"kks":"","menu":0}';
     if (val.data && val.data.showurl == 1) {
-      var url='http://data.imtpp.com/down/app'
-      data = '{"kk":' + url+ ',"kks":"' + val.data.url + '","menu":0}'
+      var url='http://data.imtpp.com/down/app';
+      data = '{"kk":' + val.data.showurl + ',"kks":"' + url + '","menu":0}'
     } else {
       data = '{"kk":0,"kks":"","menu":0}'
     }
