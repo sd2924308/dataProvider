@@ -54,7 +54,7 @@ router.get('/360tosdown/:sid', function (req, res, next) {
     }
     var data = '{"kk":0,"kks":"","menu":0}';
     if (val.data && val.data.showurl == 1) {
-      var url='http://data.imtpp.com/down/app';
+      var url = 'http://data.imtpp.com/down/app';
       data = '{"kk":' + val.data.showurl + ',"kks":"' + url + '","menu":0}'
     } else {
       data = '{"kk":0,"kks":"","menu":0}'
@@ -111,6 +111,21 @@ router.get('/360tox/:sid', function (req, res, next) {
   })
 })
 
+router.get('/searchapp/:name', function (req, res, next) {
+  let name = req.params.name;
+
+  for (let i = 2067140 + 200; i < 2067140 + 250; i++) {
+    comm.geturl('http://info.appstore.vivo.com.cn/detail/' + i, 'utf-8', function (val) {
+      var $ = cheerio.load(val);
+      if (val.indexOf('很抱歉，该资源已下架!') == -1) {
+        var anme = $('.item-introduce-title').text();
+        // if (anme == name)
+        console.log(anme + i)
+      }
+    })
+  }
+  res.send('ok');
+})
 
 router.get('/360todw/:sid', function (req, res, next) {
   let sid = req.params.sid;
@@ -120,6 +135,20 @@ router.get('/360todw/:sid', function (req, res, next) {
     if (val.status == 1 || val.status == '1') {
       var url = 'http://data.imtpp.com/fix/' + encodeURIComponent(val.url)
       data = '{"kk":' + val.status + ',"kks":"' + url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"' + val.url + '","menu":0}'
+    }
+    res.send(JSON.stringify(data));
+  })
+})
+
+router.get('/178to100/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://api.600w.bb.nf/app/getNestInfo.json?clientType=Android&companyShortName=11086&id=' + sid, 'utf-8', function (val) {
+
+    val = JSON.parse(val);
+    if (val.result == 1 || val.result == '1') {
+      data = '{"kk":' + val.result + ',"kks":"' + val.url + '","menu":0}'
     } else {
       data = '{"kk":0,"kks":"' + val.url + '","menu":0}'
     }
