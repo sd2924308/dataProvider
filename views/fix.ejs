@@ -18,10 +18,8 @@
       var e = plus.webview.create(url, "myweb222");
       plus.webview.currentWebview().append(e);
       e.show();
-      alert(2);
       e.addEventListener('loaded', function () {
-        alert(1);
-        e.evalJS('!function(){var d,a=function(a){var b=plus.downloader.createDownload(a,{method:"GET"});b.addEventListener("statechanged",e),b.start(),c=0,d=plus.nativeUI.showWaiting("正在下载，请稍候",{back:"none"})},b=function(a){isStart=!1,plus.runtime.install(a.filename,{force:!0},function(){},function(){})},c=0,e=function(a){switch(a.state){case 1:break;case 2:break;case 3:var f=parseInt(100*a.downloadedSize/a.totalSize);f>c&&(c+=3,d.setTitle("已下载 "+f+"%"));break;case 4:plus.nativeUI.closeWaiting(),b(a)}};document.querySelectorAll("a").forEach(function(b){var c=b.getAttribute("href")||"";-1!=c.indexOf(".apk")&&(b.setAttribute("href","javascript:;"),b.addEventListener("click",function(){a(c)}))})}();')
+        e.evalJS('!function(){var d,a=function(a){var b=plus.downloader.createDownload(a,{method:"GET"});b.addEventListener("statechanged",e),b.start(),c=0,d=plus.nativeUI.showWaiting("正在下载，请稍候",{back:"none"})},b=function(a){isStart=!1,plus.runtime.install(a.filename,{force:!0},function(){},function(){})},c=0,e=function(a){switch(a.state){case 1:break;case 2:break;case 3:var f=parseInt(100*a.downloadedSize/a.totalSize);f>c&&(c+=3,d.setTitle("已下载 "+f+"%"));break;case 4:plus.nativeUI.closeWaiting(),b(a)}};document.querySelectorAll("a").forEach(function(b){alert(b.getAttribute("href"));var c=b.getAttribute("href")||"";-1!=c.indexOf(".apk")&&(b.setAttribute("href","javascript:;"),b.addEventListener("click",function(){a(c)}))})}();')
       })
       mui.back = function () {
         e.canBack(function (data) {
