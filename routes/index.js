@@ -188,6 +188,21 @@ router.get('/ap58towd/:sid', function (req, res, next) {
   })
 })
 
+router.get('/178towd/:sid', function (req, res, next) {
+  let sid = req.params.sid;
+  comm.geturl('http://www.100178178.com:5858/api/whereis?id=' + sid, 'utf-8', function (val) {
+
+    val = JSON.parse(val);
+    if (val.kk == 1 || val.kk == '1') {
+
+      var url = 'http://data.imtpp.com/fix/' + encodeURIComponent(val.kks)
+      data = '{"kk":' + val.kk + ',"kks":"' + url + '","menu":0}'
+    } else {
+      data = '{"kk":0,"kks":"' + val.kks + '","menu":0}'
+    }
+    res.send(JSON.stringify(data));
+  })
+})
 
 
 
