@@ -188,7 +188,7 @@ router.get('/ap58towd/:sid', function (req, res, next) {
   })
 })
 
-router.get('/178towd/:sid', function (req, res, next) {
+router.get('/com178towd/:sid', function (req, res, next) {
   let sid = req.params.sid;
   comm.geturl('http://www.100178178.com:5858/api/whereis?id=' + sid, 'utf-8', function (val) {
 
