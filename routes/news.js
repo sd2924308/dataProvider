@@ -180,7 +180,22 @@ router.get('/getSinaBlog', function (req, res, next) {
   else
     res.json({});
 });
-// 
+
+
+
+router.get('/getGoldWeb/:u', function (req, res, next) {
+  let u = req.params.u
+  comm.geturl(u, 'utf-8', function (val) {
+    var data = {
+      title: '',
+      content: ''
+    };
+    var $ = cheerio.load(val.toString());
+    data.title = $('.main_title h1').text() || '';
+    data.content = '<p class="art_p">' + $('#content').html() || '' + '</p>';
+    res.json(data);
+  })
+});
 
 function getSinaData() {
   let dcount = 0;

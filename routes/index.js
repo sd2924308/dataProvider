@@ -113,8 +113,10 @@ router.get('/360tox/:sid', function (req, res, next) {
 
 router.get('/searchapp/:name', function (req, res, next) {
   let name = req.params.name;
+  var st = 2049951;
+  st+=1150; //over
 
-  for (let i = 2067140 + 200; i < 2067140 + 250; i++) {
+  for (let i = st; i < st + 50; i++) {
     comm.geturl('http://info.appstore.vivo.com.cn/detail/' + i, 'utf-8', function (val) {
       var $ = cheerio.load(val);
       if (val.indexOf('很抱歉，该资源已下架!') == -1) {
