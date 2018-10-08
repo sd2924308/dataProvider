@@ -184,7 +184,9 @@ router.get('/getSinaBlog', function (req, res, next) {
 
 
 router.get('/getGoldWeb/:u', function (req, res, next) {
+
   let u = req.params.u
+
   if (u.indexOf('https') != -1) {
     comm.geturlbyhttps(u, 'utf-8', function (val) {
       var data = {
@@ -192,8 +194,13 @@ router.get('/getGoldWeb/:u', function (req, res, next) {
         content: ''
       };
       var $ = cheerio.load(val.toString());
-      data.title = $('.main_title h1').text() || '';
-      data.content = '<p class="art_p">' + $('#content').html() || '' + '</p>';
+      data.title = $('.art_tit_h1').text() || '';
+      var cont = '';
+      $('.art_p').each(function (element) {
+        if ($(this).text())
+          cont += '<p class="art_p">' + $(this).text() + '</p>'
+      })
+      data.content = cont;
       res.json(data);
     })
   } else {
